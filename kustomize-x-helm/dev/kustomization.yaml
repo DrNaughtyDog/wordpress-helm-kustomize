@@ -1,3 +1,18 @@
 namePrefix:  dev-
 resources:
 - ../base
+patches:
+- patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: wordpress
+      namespace: wordpress
+    spec:
+      template:
+        spec:
+          containers:
+          - name: wordpress
+            env:
+            - name: MARIADB_HOST
+              value: dev-wordpress-mariadb
