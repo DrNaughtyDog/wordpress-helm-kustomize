@@ -1,0 +1,11 @@
+# for docs see
+# https://kubectl.docs.kubernetes.io/references/kustomize/builtins/#_helmchartinflationgenerator_
+
+helmGlobals:
+  chartHome: charts
+
+helmCharts:
+- name: wordpress
+  namespace: wordpress
+  valuesFile: values-trimmed.yaml
+  releaseName: wordpress

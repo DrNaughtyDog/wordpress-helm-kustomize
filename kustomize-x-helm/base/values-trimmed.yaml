@@ -1,0 +1,83 @@
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+  storageClass: ""
+image:
+  registry: docker.io
+  repository: bitnami/wordpress
+  tag: 6.4.3-debian-12-r11
+wordpressUsername: "changeme"
+wordpressPassword: "changeme"
+service:
+  type: ClusterIP 
+ingress:
+  enabled: true
+  ingressClassName: "nginx"
+  hostname: wordpress.plg-test-rke2-cluster-plg-test.atix-training.de
+  tls: true
+  selfSigned: true
+persistence:
+  storageClass: ""
+  size: 10Gi
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r15
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 512Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+networkPolicy:
+  enabled: true
+  ingress:
+    enabled: true
+    podSelector:
+      app.kuberentes.io/name: rke2-ingress-nginx 
+    namespaceSelector:
+      kubernetes.io/metadata.name: kube-system
+  ingressRules:
+    backendOnlyAccessibleByFrontend: true
+  egressRules:
+    denyConnectionsToExternal: true
+volumePermissions:
+  enabled: false
+  image:
+    registry: docker.io
+    repository: bitnami/os-shell
+    tag: 12-debian-12-r15
+mariadb:
+  enabled: true
+  auth:
+    rootPassword: "changeme"
+    database: bitnami_wordpress
+    username: "changeme"
+    password: "changeme"
+  primary:
+    persistence:
+      enabled: true
+      storageClass: ""
+      size: 8Gi
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+memcached:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  enabled: true
+  auth:
+    enabled: false
+    username: "changeme"
+    password: "changeme"
